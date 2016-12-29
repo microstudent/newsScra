@@ -21,10 +21,10 @@ class NewsSpider(scrapy.Spider):
         news_links = response.xpath('//div[@class="post_list"]//a[@target="_blank"]/@href').extract()
         for news_link in news_links:
             yield scrapy.Request(news_link, callback=self.parse_news_item)
-            # next_page = response.xpath('//div[@class="pagenew"]/a[last()]/@href').extract_first()
-            # if next_page is not None:
-            #     next_page = response.urljoin(next_page)
-            #     yield scrapy.Request(next_page,callback=self.parse)
+            next_page = response.xpath('//div[@class="pagenew"]/a[last()]/@href').extract_first()
+            if next_page is not None:
+                next_page = response.urljoin(next_page)
+                yield scrapy.Request(next_page,callback=self.parse)
 
     def parse_news_item(self, response):
         item = NewsItem()
